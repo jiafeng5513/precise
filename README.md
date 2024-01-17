@@ -1,4 +1,7 @@
 # Mycroft Precise
+Forked from https://github.com/MycroftAI/mycroft-precise
+
+
 
 *A lightweight, simple-to-use, RNN wake word listener.*
 

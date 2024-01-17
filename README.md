@@ -1,6 +1,6 @@
 # Mycroft Precise
 Forked from https://github.com/MycroftAI/mycroft-precise
-
+Feng will use main as release branch and FengDev as develop branch
 
 
 *A lightweight, simple-to-use, RNN wake word listener.*

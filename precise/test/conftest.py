@@ -15,7 +15,7 @@
 import pytest
 
 from precise.scripts.train import TrainScript
-from test.scripts.test_train import DummyTrainFolder
+from precise.test.test_train import DummyTrainFolder
 
 
 @pytest.fixture()

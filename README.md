@@ -1,13 +1,120 @@
-# Mycroft Precise
-Forked from https://github.com/MycroftAI/mycroft-precise
-Feng will use main as release branch and FengDev as develop branch
-
-
+Precise
+==============================
 *A lightweight, simple-to-use, RNN wake word listener.*
+#### Forked from https://github.com/MycroftAI/mycroft-precise, main as release branch, FengDev and Dev as develop branch
 
+## Introduction
 Precise is a wake word listener.  The software monitors an audio stream ( usually a microphone ) and when it recognizes a specific phrase it triggers an event.  For example, at Mycroft AI the team has trained Precise to recognize the phrase "Hey, Mycroft".  When the software recognizes this phrase it puts the rest of Mycroft's software into command mode and waits for a command from the person using the device.  Mycroft Precise is fully open source and can be trined to recognize anything from a name to a cough.
 
 In addition to Precise there are several proprietary wake word listeners out there.  If you are looking to spot a wakeword Precise might be a great solution, but if it's too resource intensive or isn't accurate enough here are some [alternative options][comparison].
+
+## Attentions And Motivations for this repo
+1. The original [repo](https://github.com/MycroftAI/mycroft-precise) is out of maintenance, which means it requires some out of time packages such as tensorflow 1.x, makes precise hard to Integrate into new projects.
+2. The original mycroft-precise need to be installed into your python env, but it just copies the scripts into bin dir without file extension '*.py' and make aliases for its. This has no advantages other than making debugging more complicated.
+3. To revive this great project, I fork it and try to add some new ideas.
+
+## usage
+### setup requirements
+1. now we just tested on ubuntu 22.04, x86_64 with intel CPU. I cannot guarantee this repo can be executed correctly on other operating systems or arch.
+2. prepare a conda env by `conda create -n precise python=3.9` and activate it by `conda activate precise`
+3. install apt packages by
+    ```shell
+    sudo apt-get update && sudo apt-get install -y libopenblas-dev libhdf5-dev portaudio19-dev
+    ```
+4. install pip packages by `pip install -r requirements.txt`
+
+### training your own model
+1. record audio files
+    The first thing you'll want to do is record some audio samples of your wake word. To do that, use the tool, precise-collect, which will guide you through recording a few samples. The default settings should be fine.
+
+    Use this tool to collect around 12 samples, making sure to leave a second or two of silence at the start of each recording, but with no silence after the wake word.
+    ```shell
+    $ cd <repo>/precise/scripts 
+    $ python collect.py
+    Audio name (Ex. recording-##): hey-computer.##
+    ALSA lib pcm_dsnoop.c:638:(snd_pcm_dsnoop_open) unable to open slave
+    ALSA lib pcm_dmix.c:1099:(snd_pcm_dmix_open) unable to open slave
+    ALSA lib pcm_dmix.c:1099:(snd_pcm_dmix_open) unable to open slave
+    Press space to record (esc to exit)...
+    Recording...
+    Saved as hey-computer.00.wav
+    Press space to record (esc to exit)...
+    ```
+   you can also use GUI tool named 'Audacity' to record audio and edit it.
+    ![img](./docs/audacity.png)
+2. audio file pre-process
+    Audio files we need as training data must be WAV files in little-endian, 16 bit, mono, 16000hz PCM format. FFMpeg calls this “pcm_s16le”. If you are collecting samples using another program they must be converted to the appropriate format using an ffmpeg command:
+    ```shell
+    $ ffmpeg -i input.mp3 -acodec pcm_s16le -ar 16000 -ac 1 output.wav
+    ```
+3. prepare training data set
+    the dir structure must like this, dataloader will read the strings 'wake-word', 'not-wake-word' and 'test'.
+    ```shell
+    ├── data
+    │   ├── not-wake-word
+    │   │   ├── f0001.wav
+    │   │   ├── f0002.wav
+    │   │   ├── f0003.wav
+    │   │   └── f0004.wav
+    │   └── wake-word
+    │       ├── t001.wav
+    │       ├── t002.wav
+    │       ├── t003.wav
+    │       ├── t004.wav
+    │       ├── t005.wav
+    │       ├── t006.wav
+    │       ├── t007.wav
+    │       ├── t008.wav
+    │       └── test              
+    │           ├── not-wake-word 
+    │           │   ├── f0001.wav 
+    │           │   ├── f0002.wav 
+    │           │   ├── f0003.wav 
+    │           │   └── f0004.wav 
+    │           └── wake-word     
+    │               ├── t001.wav  
+    │               ├── t002.wav  
+    │               ├── t003.wav  
+    │               └── t004.wav  
+   ```
+4. training
+    run this script to start training: 
+    ```shell
+    cd <repo>/precise/scripts  
+    python train.py -e 60 <path to save model>/hi_siri.net <path to dataset>data/
+    ```
+   std out will be:
+    ```shell
+    Data: <TrainData wake_words=8 not_wake_words=4 test_wake_words=4 test_not_wake_words=4>
+    Loading wake-word...
+    Loading not-wake-word...
+    Loading wake-word...
+    Loading not-wake-word...
+    Inputs shape: (12, 29, 13)
+    Outputs shape: (12, 1)
+    Test inputs shape: (8, 29, 13)
+    Test outputs shape: (8, 1)
+    Model: "sequential"
+    _________________________________________________________________
+     Layer (type)                Output Shape              Param #   
+    =================================================================
+     net (GRU)                   (None, 20)                2100      
+                                                                     
+     dense (Dense)               (None, 1)                 21        
+                                                                     
+    =================================================================
+    Total params: 2121 (8.29 KB)
+    Trainable params: 2121 (8.29 KB)
+    Non-trainable params: 0 (0.00 Byte)
+    _________________________________________________________________
+    Epoch 1/60
+    1/1 [==============================] - 1s 1s/step - loss: 1.3249 - accuracy: 0.6667 - val_loss: 1.4658 - val_accuracy: 0.5000
+    Epoch 2/60
+    1/1 [==============================] - 0s 494ms/step - loss: 1.1082 - accuracy: 0.6667 - val_loss: 1.2408 - val_accuracy: 0.5000
+    ```
+### run a simple test
+
+============ old readme below ==============
 
 [comparison]: https://github.com/MycroftAI/mycroft-precise/wiki/Software-Comparison
 

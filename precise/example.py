@@ -14,7 +14,7 @@
 # limitations under the License.
 from argparse import ArgumentParser
 from precise.util import activate_notify
-from precise_runner import PreciseRunner, PreciseEngine
+from precise.precise_runner import PreciseRunner, PreciseEngine
 from threading import Event
 
 

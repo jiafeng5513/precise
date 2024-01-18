@@ -57,7 +57,13 @@ class PreciseEngine(Engine):
     def stop(self):
         if self.proc:
             self.proc.kill()
-            self.proc = None
+            self.proc = None        'Programming Language :: Python :: 3.1',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+
 
     def get_prediction(self, chunk):
         if len(chunk) != self.chunk_size:

@@ -33,14 +33,7 @@ setup(
         'Topic :: Text Processing :: Linguistic',
         'License :: OSI Approved :: Apache Software License',
 
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.9',
     ],
     packages=[
         'precise',
@@ -71,19 +64,19 @@ setup(
     },
     include_package_data=True,
     install_requires=[
-        'numpy==1.16',
-        'tensorflow>=1.13,<1.14',  # Must be on piwheels
+        'numpy',
         'sonopy',
         'pyaudio',
-        'keras<=2.1.5',
         'h5py',
         'wavio',
         'typing',
-        'prettyparse>=1.1.0',
+        'prettyparse',
         'precise-runner',
         'attrs',
-        'fitipy<1.0',
+        'fitipy',
         'speechpy-fast',
         'pyache'
     ]
 )
+# 'keras<=2.1.5',
+# 'tensorflow>=1.13,<1.14',  # Must be on piwheels

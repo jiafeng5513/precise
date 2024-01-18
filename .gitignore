@@ -10,6 +10,7 @@ __pycache__/
 /logs
 *.egg-info/
 /.pytest_cache/
+*.logs
 
 *.pyc
 *.pb
@@ -18,11 +19,12 @@ __pycache__/
 *.json
 *.pbtxt
 *.wav
+*.epoch
 
 # Data folders
 /*/wake-word/
 /*/not-wake-word/
-/*/test/
+/training
 
 !requirements.txt
 

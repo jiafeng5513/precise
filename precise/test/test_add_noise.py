@@ -14,7 +14,7 @@
 # limitations under the License.
 from precise.scripts.add_noise import AddNoiseScript
 
-from test.scripts.dummy_audio_folder import DummyAudioFolder
+from precise.test.dummy_audio_folder import DummyAudioFolder
 
 
 class DummyNoiseFolder(DummyAudioFolder):

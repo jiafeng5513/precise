@@ -19,7 +19,7 @@ import re
 from os.path import join
 
 from precise.scripts.engine import EngineScript
-from runner.precise_runner import ReadWriteStream
+from precise.precise_runner import ReadWriteStream
 
 
 class FakeStdin:

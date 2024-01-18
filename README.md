@@ -24,13 +24,14 @@ In addition to Precise there are several proprietary wake word listeners out the
 4. install pip packages by `pip install -r requirements.txt`
 
 ### training your own model
-1. record audio files
+1. record audio files<br>
     The first thing you'll want to do is record some audio samples of your wake word. To do that, use the tool, precise-collect, which will guide you through recording a few samples. The default settings should be fine.
 
     Use this tool to collect around 12 samples, making sure to leave a second or two of silence at the start of each recording, but with no silence after the wake word.
     ```shell
     $ cd <repo>/precise/scripts 
     $ python collect.py
+   
     Audio name (Ex. recording-##): hey-computer.##
     ALSA lib pcm_dsnoop.c:638:(snd_pcm_dsnoop_open) unable to open slave
     ALSA lib pcm_dmix.c:1099:(snd_pcm_dmix_open) unable to open slave
@@ -42,12 +43,12 @@ In addition to Precise there are several proprietary wake word listeners out the
     ```
    you can also use GUI tool named 'Audacity' to record audio and edit it.
     ![img](./docs/audacity.png)
-2. audio file pre-process
+2. audio file pre-process<br>
     Audio files we need as training data must be WAV files in little-endian, 16 bit, mono, 16000hz PCM format. FFMpeg calls this “pcm_s16le”. If you are collecting samples using another program they must be converted to the appropriate format using an ffmpeg command:
     ```shell
     $ ffmpeg -i input.mp3 -acodec pcm_s16le -ar 16000 -ac 1 output.wav
     ```
-3. prepare training data set
+3. prepare training data set<br>
     the dir structure must like this, dataloader will read the strings 'wake-word', 'not-wake-word' and 'test'.
     ```shell
     ├── data
@@ -77,14 +78,12 @@ In addition to Precise there are several proprietary wake word listeners out the
     │               ├── t003.wav  
     │               └── t004.wav  
    ```
-4. training
-    run this script to start training: 
+4. training<br>
+    run this script to start training:
     ```shell
-    cd <repo>/precise/scripts  
-    python train.py -e 60 <path to save model>/hi_siri.net <path to dataset>data/
-    ```
-   std out will be:
-    ```shell
+    $ cd <repo>/precise/scripts 
+    $ python train.py -e 60 <path to save model>/hi_siri.net <path to dataset>data/
+   
     Data: <TrainData wake_words=8 not_wake_words=4 test_wake_words=4 test_not_wake_words=4>
     Loading wake-word...
     Loading not-wake-word...

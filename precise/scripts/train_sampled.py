@@ -83,7 +83,7 @@ class TrainSampledScript(TrainScript):
             self.write_sampling_metrics(predicted)
 
             self.model.fit(
-                *self.sampled_data, batch_size=self.args.batch_size,
+                *self.sampled_data, batch_size=self.args.BATCH_SIZE,
                 epochs=self.epoch + self.args.epochs,
                 callbacks=self.callbacks, initial_epoch=self.epoch,
                 validation_data=self.test

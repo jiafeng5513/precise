@@ -57,7 +57,7 @@ class TensorFlowRunner(Runner):
 
     def load_graph(self, model_file: str) -> 'tf.Graph':
         graph = self.tf.Graph()
-        graph_def = self.tf.GraphDef()
+        graph_def = self.tf.compat.v1.GraphDef()
 
         with open(model_file, "rb") as f:
             graph_def.ParseFromString(f.read())
@@ -80,7 +80,7 @@ class KerasRunner(Runner):
         import tensorflow as tf
         # ISSUE 88 - Following 3 lines added to resolve issue 88 - JM 2020-02-04 per liny90626
         from tensorflow.python.keras.backend import set_session # ISSUE 88
-        self.sess = tf.Session() # ISSUE 88
+        self.sess = tf.compat.v1.Session() # ISSUE 88
         set_session(self.sess) # ISSUE 88
         self.model = load_precise_model(model_name)
         self.graph = tf.get_default_graph()

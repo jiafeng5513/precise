@@ -104,7 +104,7 @@ class TrainIncrementalScript(TrainScript):
         print()
         try:
             self.listener.runner.model.fit(
-                train_inputs, train_outputs, self.args.batch_size, self.epoch + self.args.epochs,
+                train_inputs, train_outputs, self.args.BATCH_SIZE, self.epoch + self.args.epochs,
                 validation_data=test_data, callbacks=self.callbacks, initial_epoch=self.epoch
             )
         finally:

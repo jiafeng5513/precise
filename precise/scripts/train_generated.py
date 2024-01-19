@@ -128,7 +128,7 @@ class TrainGeneratedScript(BaseScript):
             it = self.pos_files_it if target else self.neg_files_it
             sample_file = next(it)
             yield self.layer_with(self.normalize_volume_to(load_audio(sample_file), volume), target)
-            yield self.layer_with(np.zeros(int(pr.sample_rate * (0.5 + 2.0 * random()))), 0)
+            yield self.layer_with(np.zeros(int(pr.SAMPLE_RATE * (0.5 + 2.0 * random()))), 0)
 
     def chunk_audio_pieces(self, pieces, chunk_size):
         """Convert chunks of audio into a series of equally sized pieces"""
@@ -230,7 +230,7 @@ class TrainGeneratedScript(BaseScript):
         _, test_data = self.data.load(train=False, test=True)
         try:
             self.model.fit_generator(
-                self.samples_to_batches(self.generate_samples(), self.args.batch_size),
+                self.samples_to_batches(self.generate_samples(), self.args.BATCH_SIZE),
                 steps_per_epoch=self.args.steps_per_epoch,
                 epochs=self.epoch + self.args.epochs, validation_data=test_data,
                 callbacks=self.callbacks, initial_epoch=self.epoch

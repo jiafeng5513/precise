@@ -90,13 +90,13 @@ class TrainOptimizeScript(TrainScript):
             freeze_till=0
         ))
         model.fit(
-            *self.sampled_data, batch_size=self.args.batch_size,
+            *self.sampled_data, batch_size=self.args.BATCH_SIZE,
             epochs=self.args.epochs,
             validation_data=self.test * (not self.args.no_validation),
             callbacks=[]
         )
         test_in, test_out = self.test
-        test_pred = model.predict(test_in, batch_size=self.args.batch_size)
+        test_pred = model.predict(test_in, batch_size=self.args.BATCH_SIZE)
         stats_dict = Stats(test_pred, test_out, []).to_dict()
 
         ann_est = AnnoyanceEstimator(
@@ -104,7 +104,7 @@ class TrainOptimizeScript(TrainScript):
             self.args.ambient_activation_annoyance
         ).estimate(
             model, test_pred, test_out,
-            self.args.noise_folder, self.args.batch_size
+            self.args.noise_folder, self.args.BATCH_SIZE
         )
         params_cost = self.calc_params_cost(model)
         cost = ann_est.annoyance + params_cost

@@ -42,7 +42,7 @@ class DummyAudioFolder:
         """
         for i in range(self.count):
             save_audio(join(folder, name.format(i)),
-                       np.array([value] * int(duration * pr.sample_rate)))
+                       np.array([value] * int(duration * pr.SAMPLE_RATE)))
 
     def subdir(self, *parts):
         folder = self.path(*parts)

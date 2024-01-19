@@ -51,7 +51,9 @@ def load_precise_model(model_name: str) -> Any:
         print('Warning: Unknown model type, ', model_name)
 
     inject_params(model_name)
-    return load_keras().models.load_model(model_name)
+    import tensorflow as tf
+    return tf.keras.models.load_model(model_name)
+    # return load_keras().models.load_model(model_name)
 
 
 def create_model(model_name: Optional[str], params: ModelParams) -> 'Sequential':
@@ -86,6 +88,8 @@ def create_model(model_name: Optional[str], params: ModelParams) -> 'Sequential'
     set_loss_bias(params.loss_bias)
     for i in model.layers[:params.freeze_till]:
         i.trainable = False
-    model.compile('rmsprop', weighted_log_loss,
+    model.compile(optimizer='rmsprop',
+                  loss=weighted_log_loss,
                   metrics=(not params.skip_acc) * metrics)
+    print(model.summary())
     return model

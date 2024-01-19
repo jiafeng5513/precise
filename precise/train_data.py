@@ -202,8 +202,8 @@ class TrainData:
 
             on_loop.i = 0
 
-            new_inputs = cache.load(filenames, on_loop=on_loop)
-            new_outputs = np.array([[output] for _ in range(len(new_inputs))])
+            new_inputs = cache.load(filenames, on_loop=on_loop)  # [n, 29, 13]
+            new_outputs = np.array([[output] for _ in range(len(new_inputs))])  # [n, 1]
             if new_inputs.size == 0:
                 new_inputs = np.empty((0, pr.n_features, pr.feature_size))
             if new_outputs.size == 0:

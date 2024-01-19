@@ -30,7 +30,7 @@ inhibit_hop_t = 0.1
 # Functions that convert audio frames -> vectors
 vectorizers = {
     Vectorizer.mels: lambda x: mel_spec(
-        x, pr.sample_rate, (pr.window_samples, pr.hop_samples),
+        x, pr.SAMPLE_RATE, (pr.window_samples, pr.hop_samples),
         num_filt=pr.n_filt, fft_size=pr.n_fft
     ),
     Vectorizer.mfccs: lambda x: mfcc_spec(
@@ -38,7 +38,7 @@ vectorizers = {
         num_filt=pr.n_filt, fft_size=pr.n_fft, num_coeffs=pr.n_mfcc
     ),
     Vectorizer.speechpy_mfccs: lambda x: __import__('speechpy').feature.mfcc(
-        x, pr.sample_rate, pr.window_t, pr.hop_t, pr.n_mfcc, pr.n_filt, pr.n_fft
+        x, pr.SAMPLE_RATE, pr.window_t, pr.hop_t, pr.n_mfcc, pr.n_filt, pr.n_fft
     )
 }
 
@@ -96,7 +96,7 @@ def vectorize_inhibit(audio: np.ndarray) -> np.ndarray:
     """
 
     def samp(x):
-        return int(pr.sample_rate * x)
+        return int(pr.SAMPLE_RATE * x)
 
     inputs = []
     for offset in range(samp(inhibit_t), samp(inhibit_dist_t), samp(inhibit_hop_t)):

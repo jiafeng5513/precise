@@ -18,7 +18,7 @@ computation in various places
 from math import exp, log, sqrt, pi
 import numpy as np
 from typing import *
-
+import keras
 LOSS_BIAS = 0.9  # [0..1] where 1 is inf bias
 
 
@@ -49,6 +49,15 @@ def weighted_log_loss(yt, yp) -> Any:
 
     return LOSS_BIAS * K.mean(neg_loss) + (1. - LOSS_BIAS) * K.mean(pos_loss)
 
+
+class WeightedLogLoss(keras.losses.Loss):
+    def call(self, y_true, y_pred):
+        from keras import backend as K
+
+        pos_loss = -(0 + y_true) * K.log(0 + y_pred + K.epsilon())
+        neg_loss = -(1 - y_true) * K.log(1 - y_pred + K.epsilon())
+
+        return LOSS_BIAS * K.mean(neg_loss) + (1. - LOSS_BIAS) * K.mean(pos_loss)
 
 def weighted_mse_loss(yt, yp) -> Any:
     """Standard mse loss with a weighting between false negatives and positives"""
@@ -85,6 +94,7 @@ def load_keras() -> Any:
     """Imports Keras injecting custom functions to prevent exceptions"""
     import keras
     keras.losses.weighted_log_loss = weighted_log_loss
+    # keras.losses.Loss = WeightedLogLoss
     keras.metrics.false_pos = false_pos
     keras.metrics.false_positives = false_pos
     keras.metrics.false_neg = false_neg

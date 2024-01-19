@@ -19,10 +19,11 @@ from threading import Event
 
 
 def main():
-    parser = ArgumentParser('Implementation demo of precise-engine')
-    parser.add_argument('engine', help='Location of binary engine file')
-    parser.add_argument('model')
-    args = parser.parse_args()
+    # parser = ArgumentParser('Implementation demo of precise-engine')
+    engine = "/home/anna/WorkSpace/celadon/demo-src/mycroft-precise/precise/scripts/engine.py"
+    model = "/home/anna/WorkSpace/celadon/demo-src/mycroft-precise/training/hello_intel.net"
+
+    # args = parser.parse_args()
 
     def on_prediction(prob):
         print('!' if prob > 0.5 else '.', end='', flush=True)
@@ -30,7 +31,7 @@ def main():
     def on_activation():
         activate_notify()
 
-    engine = PreciseEngine(args.engine, args.model)
+    engine = PreciseEngine(engine, model)
     PreciseRunner(engine, on_prediction=on_prediction, on_activation=on_activation,
                   trigger_level=0).start()
     Event().wait()  # Wait forever

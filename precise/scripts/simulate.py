@@ -62,7 +62,7 @@ class Metric:
 
     @property
     def chunks(self):
-        return self.seconds * pr.sample_rate / self.chunk_size
+        return self.seconds * pr.SAMPLE_RATE / self.chunk_size
 
     def info_string(self, title):
         return (
@@ -115,7 +115,7 @@ class SimulateScript(BaseScript):
 
             metric = Metric(
                 chunk_size=self.args.chunk_size,
-                seconds=len(audio) / pr.sample_rate,
+                seconds=len(audio) / pr.SAMPLE_RATE,
                 activated_chunks=(predictions > detector.sensitivity).sum(),
                 activations=sum(detector.update(i) for i in predictions),
                 activation_sum=predictions.sum()

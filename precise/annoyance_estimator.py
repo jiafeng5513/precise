@@ -64,7 +64,7 @@ class AnnoyanceEstimator:
         for i in glob(join(noise_folder, '*.wav')):
             print('Evaluating ambient activations on {}...'.format(i))
             inputs, audio_len = self._load_inputs(i)
-            nww_seconds += audio_len / pr.sample_rate
+            nww_seconds += audio_len / pr.SAMPLE_RATE
             ambient_predictions = model.predict(inputs, batch_size=batch_size)
             del inputs
             nww_buckets += (ambient_predictions.reshape((-1, 1))

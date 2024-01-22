@@ -11,6 +11,7 @@ __pycache__/
 *.egg-info/
 /.pytest_cache/
 *.logs
+precise/tensorboard_summary
 
 *.pyc
 *.pb

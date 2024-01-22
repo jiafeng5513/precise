@@ -78,8 +78,9 @@ def create_model(model_name: Optional[str], params: ModelParams) -> 'Sequential'
         model = Sequential()
         model.add(GRU(
             params.recurrent_units, activation='linear',
-            input_shape=(
-                pr.n_features, pr.feature_size), dropout=params.dropout, name='net'
+            input_shape=(pr.n_features, pr.feature_size),
+            dropout=params.dropout,
+            name='net'
         ))
         model.add(Dense(1, activation='sigmoid'))
 

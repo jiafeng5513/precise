@@ -82,8 +82,10 @@ class KerasRunner(Runner):
         from tensorflow.python.keras.backend import set_session # ISSUE 88
         self.sess = tf.compat.v1.Session() # ISSUE 88
         set_session(self.sess) # ISSUE 88
-        self.model = load_precise_model(model_name)
-        self.graph = tf.get_default_graph()
+        self.graph = tf.Graph()
+        with self.graph.as_default():
+            self.model = load_precise_model(model_name)
+
 
     def predict(self, inputs: np.ndarray):
         from tensorflow.python.keras.backend import set_session		# ISSUE 88

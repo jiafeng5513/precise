@@ -22,7 +22,9 @@ from precise.functions import false_pos, false_neg, weighted_log_loss, set_loss_
 from precise.params import inject_params, pr
 
 if TYPE_CHECKING:
-    from keras.models import Sequential
+    # from keras.models import Sequential
+    # import tensorflow
+    from tensorflow.keras.models import Sequential
 
 
 @attr.s()
@@ -52,7 +54,7 @@ def load_precise_model(model_name: str) -> Any:
 
     inject_params(model_name)
     import tensorflow as tf
-    return tf.keras.models.load_model(model_name)
+    return tf.keras.models.load_model(model_name, custom_objects={"weighted_log_loss": weighted_log_loss})
     # return load_keras().models.load_model(model_name)
 
 

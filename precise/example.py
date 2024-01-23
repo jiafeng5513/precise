@@ -20,8 +20,8 @@ from threading import Event
 
 def main():
     # parser = ArgumentParser('Implementation demo of precise-engine')
-    engine = "/home/anna/WorkSpace/celadon/demo-src/mycroft-precise/precise/scripts/engine.py"
-    model = "/home/anna/WorkSpace/celadon/demo-src/mycroft-precise/training/hello_intel.net"
+    engine = "/home/anna/WorkSpace/celadon/demo-src/precise/precise/scripts/engine.py"
+    model = "/home/anna/WorkSpace/celadon/demo-src/precise/training/hello_intel.net"
 
     # args = parser.parse_args()
 

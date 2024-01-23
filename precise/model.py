@@ -18,7 +18,7 @@ import attr
 from os.path import isfile
 from typing import *
 
-from precise.functions import load_keras, false_pos, false_neg, weighted_log_loss, set_loss_bias
+from precise.functions import false_pos, false_neg, weighted_log_loss, set_loss_bias
 from precise.params import inject_params, pr
 
 if TYPE_CHECKING:
@@ -71,9 +71,9 @@ def create_model(model_name: Optional[str], params: ModelParams) -> 'Sequential'
         print('Loading from ' + model_name + '...')
         model = load_precise_model(model_name)
     else:
-        from keras.layers import Dense
-        from keras.layers import GRU
-        from keras.models import Sequential
+        from tensorflow.keras.layers import Dense
+        from tensorflow.keras.layers import GRU
+        from tensorflow.keras.models import Sequential
 
         model = Sequential()
         model.add(GRU(
@@ -84,7 +84,7 @@ def create_model(model_name: Optional[str], params: ModelParams) -> 'Sequential'
         ))
         model.add(Dense(1, activation='sigmoid'))
 
-    load_keras()
+    # load_keras()
     metrics = ['accuracy'] + params.extra_metrics * [false_pos, false_neg]
     set_loss_bias(params.loss_bias)
     for i in model.layers[:params.freeze_till]:

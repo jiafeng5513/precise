@@ -20,6 +20,7 @@ LR_SCHEDULER_STEP_SIZE = 100
 LR_SCHEDULER_GAMMA = 0.9
 LR_SCHEDULER_INIT_LR = 5e-3
 TENSORBOARD_SUMMARY_DIR = "./tensorboard_summary"
+MODEL_NAME = "./torch_model.pth"
 MAX_EPOCH = 100
 VAL_EACH_ITER = 20
 
@@ -90,7 +91,7 @@ class GRUNet(nn.Module):
         self.n_layers = n_layers
         self.device = device
 
-        self.gru = nn.GRU(input_dim, hidden_dim, n_layers, batch_first=True, dropout=drop_prob)
+        self.gru = nn.GRU(input_dim, hidden_dim, n_layers, batch_first=True, dropout=drop_prob, bias=False)
         self.fc = nn.Linear(hidden_dim * hidden_dim, output_dim)
 
         self.sigmoid = nn.Sigmoid()
@@ -224,7 +225,8 @@ def train_and_validate(dataset_path, training_device='cpu'):
             iter_total += 1
 
     pass
-
+    writer.close()
+    torch.save(model, MODEL_NAME)
 
 if __name__ == '__main__':
     # dummy_dataloader = dataloader("/home/anna/WorkSpace/celadon/demo-src/precise/training/data")

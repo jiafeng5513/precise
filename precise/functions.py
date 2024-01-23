@@ -18,7 +18,7 @@ computation in various places
 from math import exp, log, sqrt, pi
 import numpy as np
 from typing import *
-import keras
+import tensorflow as tf
 LOSS_BIAS = 0.9  # [0..1] where 1 is inf bias
 
 
@@ -42,30 +42,24 @@ def weighted_log_loss(yt, yp) -> Any:
     yt: Target
     yp: Prediction
     """
-    from keras import backend as K
+    pos_loss = -(0 + yt) * tf.math.log(0 + yp + tf.keras.backend.epsilon())
+    neg_loss = -(1 - yt) * tf.math.log(1 - yp + tf.keras.backend.epsilon())
 
-    pos_loss = -(0 + yt) * K.log(0 + yp + K.epsilon())
-    neg_loss = -(1 - yt) * K.log(1 - yp + K.epsilon())
-
-    return LOSS_BIAS * K.mean(neg_loss) + (1. - LOSS_BIAS) * K.mean(pos_loss)
+    return LOSS_BIAS * tf.math.reduce_mean(neg_loss) + (1. - LOSS_BIAS) * tf.math.reduce_mean(pos_loss)
 
 
-class WeightedLogLoss(keras.losses.Loss):
+class WeightedLogLoss(tf.keras.losses.Loss):
     def call(self, y_true, y_pred):
-        from keras import backend as K
+        pos_loss = -(0 + y_true) * tf.math.log(0 + y_pred + tf.keras.backend.epsilon())
+        neg_loss = -(1 - y_true) * tf.math.log(1 - y_pred + tf.keras.backend.epsilon())
 
-        pos_loss = -(0 + y_true) * K.log(0 + y_pred + K.epsilon())
-        neg_loss = -(1 - y_true) * K.log(1 - y_pred + K.epsilon())
-
-        return LOSS_BIAS * K.mean(neg_loss) + (1. - LOSS_BIAS) * K.mean(pos_loss)
+        return LOSS_BIAS * tf.math.reduce_mean(neg_loss) + (1. - LOSS_BIAS) * tf.math.reduce_mean(pos_loss)
 
 def weighted_mse_loss(yt, yp) -> Any:
     """Standard mse loss with a weighting between false negatives and positives"""
-    from keras import backend as K
-
-    total = K.sum(K.ones_like(yt))
-    neg_loss = total * K.sum(K.square(yp * (1 - yt))) / K.sum(1 - yt)
-    pos_loss = total * K.sum(K.square(1. - (yp * yt))) / K.sum(yt)
+    total = tf.math.reduce_sum(tf.ones_like(yt))
+    neg_loss = total * tf.math.reduce_sum(tf.math.reduce_square(yp * (1 - yt))) / tf.math.reduce_sum(1 - yt)
+    pos_loss = total * tf.math.reduce_sum(tf.math.square(1. - (yp * yt))) / tf.math.reduce_sum(yt)
 
     return LOSS_BIAS * neg_loss + (1. - LOSS_BIAS) * pos_loss
 
@@ -76,8 +70,7 @@ def false_pos(yt, yp) -> Any:
     This will not be completely accurate because it weights batches
     equally
     """
-    from keras import backend as K
-    return K.sum(K.cast(yp * (1 - yt) > 0.5, 'float')) / K.maximum(1.0, K.sum(1 - yt))
+    return tf.math.reduce_sum(tf.cast(yp * (1 - yt) > 0.5, 'float')) / tf.math.maximum(1.0, tf.math.reduce_sum(1 - yt))
 
 
 def false_neg(yt, yp) -> Any:
@@ -86,19 +79,18 @@ def false_neg(yt, yp) -> Any:
     This will not be completely accurate because it weights batches
     equally
     """
-    from keras import backend as K
-    return K.sum(K.cast((1 - yp) * (0 + yt) > 0.5, 'float')) / K.maximum(1.0, K.sum(0 + yt))
+    return tf.math.reduce_sum(tf.cast((1 - yp) * (0 + yt) > 0.5, 'float')) / tf.math.maximum(1.0, tf.math.reduce_sum(0 + yt))
 
 
-def load_keras() -> Any:
-    """Imports Keras injecting custom functions to prevent exceptions"""
-    import keras
-    keras.losses.weighted_log_loss = weighted_log_loss
-    # keras.losses.Loss = WeightedLogLoss
-    keras.metrics.false_pos = false_pos
-    keras.metrics.false_positives = false_pos
-    keras.metrics.false_neg = false_neg
-    return keras
+# def load_keras() -> Any:
+#     """Imports Keras injecting custom functions to prevent exceptions"""
+#     import keras
+#     keras.losses.weighted_log_loss = weighted_log_loss
+#     # keras.losses.Loss = WeightedLogLoss
+#     keras.metrics.false_pos = false_pos
+#     keras.metrics.false_positives = false_pos
+#     keras.metrics.false_neg = false_neg
+#     return keras
 
 
 def sigmoid(x):

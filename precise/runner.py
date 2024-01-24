@@ -64,7 +64,8 @@ class PreciseEngine(Engine):
             raise ValueError('Invalid chunk size: ' + str(len(chunk)))
         self.proc.stdin.write(chunk)
         self.proc.stdin.flush()
-        return float(self.proc.stdout.readline())
+        # return float(self.proc.stdout.readline())
+        return self.proc.stdout.readline()
 
 
 class ListenerEngine(Engine):
@@ -238,6 +239,9 @@ class PreciseRunner(object):
                 continue
 
             prob = self.engine.get_prediction(chunk)
-            self.on_prediction(prob)
-            if self.detector.update(prob):
+            prob_list_str = prob.decode('ascii').strip().replace("(", "").replace(")", "").split(",")
+            raw_prob = float(prob_list_str[0])
+            smooth_prob = float(prob_list_str[1])
+            self.on_prediction(raw_prob, smooth_prob)
+            if self.detector.update(smooth_prob):
                 self.on_activation()

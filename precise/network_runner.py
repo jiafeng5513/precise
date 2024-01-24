@@ -148,9 +148,9 @@ class Listener:
 
         return self.mfccs
 
-    def update(self, stream: Union[BinaryIO, np.ndarray, bytes]) -> float:
+    def update(self, stream: Union[BinaryIO, np.ndarray, bytes]) -> tuple[float, float]:
         mfccs = self.update_vectors(stream)
         if self.pr.use_delta:
             mfccs = add_deltas(mfccs)
         raw_output = self.runner.run(mfccs)
-        return self.threshold_decoder.decode(raw_output)
+        return raw_output, self.threshold_decoder.decode(raw_output)

@@ -38,16 +38,16 @@ Run a model on microphone audio input
 """
 import numpy as np
 from os.path import join
-from precise_runner import PreciseRunner
-from precise_runner.runner import ListenerEngine
+from runner import PreciseRunner
+from runner import ListenerEngine
 from prettyparse import Usage
 from random import randint
 from shutil import get_terminal_size
 from threading import Event
 
-from precise.network_runner import Listener
-from precise.scripts.base_script import BaseScript
-from precise.util import save_audio, buffer_to_audio, activate_notify
+from network_runner import Listener
+from base_script import BaseScript
+from util import save_audio, buffer_to_audio, activate_notify
 
 
 class ListenScript(BaseScript):

@@ -14,7 +14,7 @@
 # limitations under the License.
 from os.path import isfile
 
-from precise.scripts.convert import ConvertScript
+from precise.convert import ConvertScript
 
 
 def test_convert(train_folder, train_script):

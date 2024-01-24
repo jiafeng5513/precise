@@ -18,8 +18,8 @@ import glob
 import re
 from os.path import join
 
-from precise.scripts.engine import EngineScript
-from precise.precise_runner import ReadWriteStream
+from precise.engine import EngineScript
+from precise.runner import ReadWriteStream
 
 
 class FakeStdin:

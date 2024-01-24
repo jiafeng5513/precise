@@ -11,7 +11,7 @@ import shutil
 from pyache import Pyache
 
 from vectorization import *
-from precise.params import pr, Vectorizer
+from params import pr, Vectorizer
 
 LOSS_BIAS = 0.9
 SAMPLE_RATE = 16000

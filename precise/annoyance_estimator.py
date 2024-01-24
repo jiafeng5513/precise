@@ -17,9 +17,9 @@ from os.path import join
 
 import numpy as np
 
-from precise.params import pr
-from precise.util import load_audio
-from precise.vectorization import vectorize_raw
+from params import pr
+from util import load_audio
+from vectorization import vectorize_raw
 
 AnnoyanceEstimate = namedtuple(
     'AnnoyanceEstimate',

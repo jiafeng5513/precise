@@ -1,4 +1,4 @@
-from precise_runner import ReadWriteStream
+from precise.runner import ReadWriteStream
 
 
 class TestReadWriteStream:

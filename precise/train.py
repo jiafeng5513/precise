@@ -60,11 +60,11 @@ from os.path import splitext, isfile
 from prettyparse import Usage
 from typing import Any, Tuple
 
-from precise.model import create_model, ModelParams
-from precise.params import inject_params, save_params
-from precise.scripts.base_script import BaseScript
-from precise.train_data import TrainData
-from precise.util import calc_sample_hash
+from model import create_model, ModelParams
+from params import inject_params, save_params
+from base_script import BaseScript
+from train_data import TrainData
+from util import calc_sample_hash
 
 
 class TrainScript(BaseScript):
@@ -80,6 +80,7 @@ class TrainScript(BaseScript):
         if not 0.0 <= args.sensitivity <= 1.0:
             raise ValueError('sensitivity must be between 0.0 and 1.0')
 
+        print("args.sensitivity = {}".format(args.sensitivity))
         inject_params(args.model)
         save_params(args.model)
         params = ModelParams(skip_acc=args.no_validation, extra_metrics=args.extra_metrics,

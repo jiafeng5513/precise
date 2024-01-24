@@ -24,8 +24,8 @@ from prettyparse import Usage
 from pyache import Pyache
 from typing import *
 
-from precise.util import find_wavs, load_audio
-from precise.vectorization import vectorize_delta, vectorize
+from util import find_wavs, load_audio
+from vectorization import vectorize_delta, vectorize
 
 
 class TrainData:

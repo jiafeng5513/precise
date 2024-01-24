@@ -14,7 +14,7 @@
 # limitations under the License.
 import pytest
 
-from precise.scripts.train import TrainScript
+from precise.train import TrainScript
 from precise.test.test_train import DummyTrainFolder
 
 

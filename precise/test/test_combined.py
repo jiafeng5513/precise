@@ -15,9 +15,9 @@
 
 from os.path import isfile
 
-from precise.scripts.calc_threshold import CalcThresholdScript
-from precise.scripts.eval import EvalScript
-from precise.scripts.graph import GraphScript
+from precise.calc_threshold import CalcThresholdScript
+from precise.eval import EvalScript
+from precise.graph import GraphScript
 
 
 def read_content(filename):

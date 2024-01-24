@@ -27,7 +27,7 @@ from os.path import split, isfile
 from prettyparse import Usage
 from shutil import copyfile
 
-from precise.scripts.base_script import BaseScript
+from base_script import BaseScript
 
 
 class ConvertScript(BaseScript):

@@ -40,8 +40,8 @@ from prettyparse import Usage
 from subprocess import check_output, PIPE
 
 from precise.pocketsphinx.listener import PocketsphinxListener
-from precise.scripts.base_script import BaseScript
-from precise.scripts.test import Stats
+from precise.base_script import BaseScript
+from precise.test import Stats
 from precise.train_data import TrainData
 
 

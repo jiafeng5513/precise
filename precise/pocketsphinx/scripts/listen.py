@@ -36,7 +36,7 @@ from prettyparse import Usage
 from threading import Event
 
 from precise.pocketsphinx.listener import PocketsphinxListener
-from precise.scripts.base_script import BaseScript
+from precise.base_script import BaseScript
 from precise.util import activate_notify
 
 

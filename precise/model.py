@@ -18,8 +18,8 @@ import attr
 from os.path import isfile
 from typing import *
 
-from precise.functions import false_pos, false_neg, weighted_log_loss, set_loss_bias
-from precise.params import inject_params, pr
+from functions import false_pos, false_neg, weighted_log_loss, set_loss_bias
+from params import inject_params, pr
 
 if TYPE_CHECKING:
     # from keras.models import Sequential

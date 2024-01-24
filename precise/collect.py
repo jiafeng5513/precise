@@ -34,7 +34,7 @@ from os.path import isfile
 from prettyparse import Usage
 from pyaudio import PyAudio
 
-from precise.scripts.base_script import BaseScript
+from base_script import BaseScript
 
 
 def record_until(p, should_return, args):

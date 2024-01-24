@@ -21,11 +21,11 @@ from os.path import splitext
 from typing import *
 from typing import BinaryIO
 
-from precise.threshold_decoder import ThresholdDecoder
-from precise.model import load_precise_model
-from precise.params import inject_params, pr
-from precise.util import buffer_to_audio
-from precise.vectorization import vectorize_raw, add_deltas
+from threshold_decoder import ThresholdDecoder
+from model import load_precise_model
+from params import inject_params, pr
+from util import buffer_to_audio
+from vectorization import vectorize_raw, add_deltas
 
 
 class Runner(metaclass=ABCMeta):
@@ -79,19 +79,20 @@ class KerasRunner(Runner):
     def __init__(self, model_name: str):
         import tensorflow as tf
         # ISSUE 88 - Following 3 lines added to resolve issue 88 - JM 2020-02-04 per liny90626
-        from tensorflow.python.keras.backend import set_session # ISSUE 88
-        self.sess = tf.compat.v1.Session() # ISSUE 88
-        set_session(self.sess) # ISSUE 88
+        # from tensorflow.python.keras.backend import set_session # ISSUE 88
+        # self.sess = tf.compat.v1.Session() # ISSUE 88
+        # set_session(self.sess) # ISSUE 88
         self.graph = tf.Graph()
         with self.graph.as_default():
             self.model = load_precise_model(model_name)
 
 
     def predict(self, inputs: np.ndarray):
-        from tensorflow.python.keras.backend import set_session		# ISSUE 88
+        # from tensorflow.python.keras.backend import set_session		# ISSUE 88
         with self.graph.as_default():
-            set_session(self.sess)		# ISSUE 88
-            return self.model.predict(inputs)
+            # set_session(self.sess)		# ISSUE 88
+            y = self.model.predict(inputs)
+            return y
 
     def run(self, inp: np.ndarray) -> float:
         return self.predict(inp[np.newaxis])[0][0]

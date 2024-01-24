@@ -32,14 +32,14 @@ import attr
 import numpy as np
 from glob import glob
 from os.path import join, basename
-from precise_runner.runner import TriggerDetector
+from runner import TriggerDetector
 from prettyparse import Usage
 
-from precise.network_runner import Listener
-from precise.params import pr, inject_params
-from precise.scripts.base_script import BaseScript
-from precise.util import load_audio
-from precise.vectorization import vectorize_raw
+from network_runner import Listener
+from params import pr, inject_params
+from base_script import BaseScript
+from util import load_audio
+from vectorization import vectorize_raw
 
 
 @attr.s()

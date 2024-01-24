@@ -47,12 +47,12 @@ import json
 from os.path import isfile, isdir
 from prettyparse import Usage
 
-from precise.network_runner import Listener
-from precise.params import inject_params
-from precise.pocketsphinx.scripts.test import PocketsphinxTestScript
-from precise.scripts.base_script import BaseScript
-from precise.stats import Stats
-from precise.train_data import TrainData
+from network_runner import Listener
+from params import inject_params
+from pocketsphinx.scripts.test import PocketsphinxTestScript
+from base_script import BaseScript
+from stats import Stats
+from train_data import TrainData
 
 
 class EvalScript(BaseScript):

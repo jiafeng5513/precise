@@ -37,9 +37,9 @@ from math import sqrt
 from os.path import basename, splitext
 from prettyparse import Usage
 
-from precise.params import inject_params, save_params
-from precise.scripts.base_script import BaseScript
-from precise.stats import Stats
+from params import inject_params, save_params
+from base_script import BaseScript
+from stats import Stats
 
 
 class CalcThresholdScript(BaseScript):

@@ -14,26 +14,26 @@
 # limitations under the License.
 from argparse import ArgumentParser
 from precise.util import activate_notify
-from precise.precise_runner import PreciseRunner, PreciseEngine
+from precise.runner import PreciseRunner, PreciseEngine
 from threading import Event
 
 
 def main():
     # parser = ArgumentParser('Implementation demo of precise-engine')
-    engine = "/home/anna/WorkSpace/celadon/demo-src/precise/precise/scripts/engine.py"
+    engine = "/home/anna/WorkSpace/celadon/demo-src/precise/precise/engine.py"
     model = "/home/anna/WorkSpace/celadon/demo-src/precise/training/hello_intel.net"
 
     # args = parser.parse_args()
 
     def on_prediction(prob):
-        print('!' if prob > 0.5 else '.', end='', flush=True)
+        print("prob = {:.2f} {}".format(prob, ("get" if prob > 0.5 else "")))
+        # print('!' if prob > 0.5 else '.', end='', flush=True)
 
     def on_activation():
         activate_notify()
 
-    engine = PreciseEngine(engine, model)
-    PreciseRunner(engine, on_prediction=on_prediction, on_activation=on_activation,
-                  trigger_level=0).start()
+    engine = PreciseEngine(engine, model, chunk_size=2048)
+    PreciseRunner(engine, on_prediction=on_prediction, on_activation=on_activation, trigger_level=3, sensitivity=0.5).start()
     Event().wait()  # Wait forever
 
 

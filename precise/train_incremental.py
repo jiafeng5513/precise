@@ -41,12 +41,12 @@ from prettyparse import Usage
 from random import random
 from typing import *
 
-from precise.model import create_model, ModelParams
-from precise.network_runner import Listener, KerasRunner
-from precise.params import pr
-from precise.scripts.train import TrainScript
-from precise.train_data import TrainData
-from precise.util import load_audio, save_audio, glob_all, chunk_audio
+from model import create_model, ModelParams
+from network_runner import Listener, KerasRunner
+from params import pr
+from train import TrainScript
+from train_data import TrainData
+from util import load_audio, save_audio, glob_all, chunk_audio
 
 
 def load_trained_fns(model_name: str) -> list:

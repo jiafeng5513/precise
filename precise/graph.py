@@ -46,12 +46,12 @@ from os.path import basename, splitext
 from prettyparse import Usage
 from typing import Callable, Tuple
 
-from precise.network_runner import Listener
-from precise.params import inject_params, pr
-from precise.scripts.base_script import BaseScript
-from precise.stats import Stats
-from precise.threshold_decoder import ThresholdDecoder
-from precise.train_data import TrainData
+from network_runner import Listener
+from params import inject_params, pr
+from base_script import BaseScript
+from stats import Stats
+from threshold_decoder import ThresholdDecoder
+from train_data import TrainData
 
 
 def get_thresholds(points=100, power=3) -> list:

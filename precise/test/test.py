@@ -33,7 +33,7 @@ from prettyparse import Usage
 
 from precise.network_runner import Listener
 from precise.params import inject_params
-from precise.scripts.base_script import BaseScript
+from precise.base_script import BaseScript
 from precise.stats import Stats
 from precise.train_data import TrainData
 

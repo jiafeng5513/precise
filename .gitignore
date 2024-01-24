@@ -21,6 +21,8 @@ precise/tensorboard_summary
 *.pbtxt
 *.wav
 *.epoch
+*.pth
+*.dtmp
 
 # Data folders
 /*/wake-word/

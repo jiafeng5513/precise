@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from precise.scripts.add_noise import AddNoiseScript
+from precise.add_noise import AddNoiseScript
 
 from precise.test.dummy_audio_folder import DummyAudioFolder
 

@@ -42,11 +42,11 @@ from uuid import uuid4
 from keras.models import save_model
 from prettyparse import Usage
 
-from precise.annoyance_estimator import AnnoyanceEstimator
-from precise.model import ModelParams, create_model
-from precise.params import pr, save_params
-from precise.scripts.train import TrainScript
-from precise.stats import Stats
+from annoyance_estimator import AnnoyanceEstimator
+from model import ModelParams, create_model
+from params import pr, save_params
+from train import TrainScript
+from stats import Stats
 
 
 class TrainOptimizeScript(TrainScript):

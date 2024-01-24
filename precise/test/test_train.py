@@ -15,7 +15,7 @@
 from os.path import isfile
 
 from precise.params import pr
-from precise.scripts.train import TrainScript
+from precise.train import TrainScript
 from precise.test.dummy_audio_folder import DummyAudioFolder
 
 

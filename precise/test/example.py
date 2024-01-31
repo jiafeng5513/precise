@@ -23,8 +23,8 @@ import matplotlib.lines as line
 import matplotlib.animation as animation
 import numpy as np
 from collections import deque
-import time
 
+from pyaudio import PyAudio
 
 def main():
     engine = "/home/anna/WorkSpace/celadon/demo-src/precise/precise/engine.py"
@@ -68,7 +68,7 @@ def main():
         return line1, line2, line3
 
     def on_prediction(raw_prob, smooth_prob):
-        print("raw_prob = {:.3f}, smooth_prob = {:.3f} {}".format(raw_prob, smooth_prob, ("get" if raw_prob > 0.5 else "")))
+        print("raw_prob = {:.3f}, smooth_prob = {:.3f} {}".format(raw_prob, smooth_prob, ("get" if smooth_prob > 0.5 else "")))
         y1.append(raw_prob)
         y2.append(smooth_prob)
 
@@ -82,10 +82,18 @@ def main():
                                   interval=10,  # 图像更新间隔
                                   blit=True)
 
+    audio_handle = PyAudio()
+    audio_device_count = audio_handle.get_device_count()
+    print("Found {} device(s)".format(audio_device_count))
+    for i in range(audio_device_count):
+        print("Device ID = {}".format(i))
+        print(audio_handle.get_device_info_by_index(i))
 
-    engine = PreciseEngine(engine, model, chunk_size=2048)
+    engine = PreciseEngine(engine, model, chunk_size=16000*3)
     PreciseRunner(engine, on_prediction=on_prediction, on_activation=on_activation, trigger_level=3, sensitivity=0.5).start()
+    plt.title("activate prob(read=smooth,green=threshold,blue=raw)")
     plt.show()  # 显示图像
+
     Event().wait()  # Wait forever
 
 

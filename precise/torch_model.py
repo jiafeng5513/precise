@@ -15,14 +15,14 @@ from params import pr, Vectorizer
 
 LOSS_BIAS = 0.9
 SAMPLE_RATE = 16000
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 LR_SCHEDULER_STEP_SIZE = 100
 LR_SCHEDULER_GAMMA = 0.9
 LR_SCHEDULER_INIT_LR = 5e-3
 TENSORBOARD_SUMMARY_DIR = "./tensorboard_summary"
 MODEL_NAME = "./torch_model.pth"
-MAX_EPOCH = 100
-VAL_EACH_ITER = 20
+MAX_EPOCH = 200
+VAL_EACH_ITER = BATCH_SIZE*5
 
 
 class InvalidAudio(ValueError):
@@ -92,15 +92,25 @@ class GRUNet(nn.Module):
         self.device = device
 
         self.gru = nn.GRU(input_dim, hidden_dim, n_layers, batch_first=True, dropout=drop_prob, bias=False)
-        self.fc = nn.Linear(hidden_dim * hidden_dim, output_dim)
+        self.fc1 = nn.Linear(hidden_dim, 128)
+        self.fc2 = nn.Linear(128, output_dim)
+        # self.fc3 = nn.Linear(128, 64)
+        # self.fc4 = nn.Linear(64, 32)
+        # self.fc5 = nn.Linear(32, output_dim)
 
         self.sigmoid = nn.Sigmoid()
+        self.relu = nn.ReLU()
 
     def forward(self, x, h):
         gru_out_y, gru_out_h = self.gru(x, h)  # [batch_size, 29, 29], [20, batch_size, 29]
-        gru_out_y_vec = gru_out_y.reshape(gru_out_y.shape[0], -1)
-        # out = self.fc(self.sigmoid1(out[:, -1]))
-        out = self.fc(gru_out_y_vec)
+        # gru_out_y_vec = gru_out_y.reshape(gru_out_y.shape[0], -1)
+        out = gru_out_y[:, -1, :]
+        out = self.fc1(out)
+        out = self.relu(out)
+        out = self.fc2(out)
+        # out = self.fc3(out)
+        # out = self.fc4(out)
+        # out = self.fc5(out)
         out = self.sigmoid(out)
         return out, gru_out_h
 
@@ -156,7 +166,8 @@ def train_and_validate(dataset_path, training_device='cpu'):
 
     print("pr.n_features = {}".format(pr.n_features))
     print("pr.feature_size = {}".format(pr.feature_size))
-
+    print("train_mini_batch_number = {}".format(train_mini_batch_number))
+    print("val_mini_batch_number = {}".format(val_mini_batch_number))
     model = GRUNet(input_dim=pr.feature_size, hidden_dim=pr.n_features, output_dim=1, n_layers=20, device=training_device, drop_prob=0.2)
     optimizer = torch.optim.SGD(model.parameters(), lr=LR_SCHEDULER_INIT_LR)
     step_schedule = torch.optim.lr_scheduler.StepLR(step_size=LR_SCHEDULER_STEP_SIZE, gamma=LR_SCHEDULER_GAMMA, optimizer=optimizer)
@@ -179,13 +190,15 @@ def train_and_validate(dataset_path, training_device='cpu'):
     iter_val_total = 0
     times_val = 0
 
+    loss_func = torch.nn.BCELoss()
+
     for epoch in range(MAX_EPOCH):
         for iter, (audio_tensor, label_tensor) in enumerate(train_loader):
             audio_tensor = audio_tensor.to(training_device)  # [batch_size, 29, 13]
             label_tensor = label_tensor.to(training_device)  # [batch_size, 1]
             h = model.init_hidden(audio_tensor.shape[0])  # [20, batch_size, 29]
             output_y, output_h = model(audio_tensor, h)  # [batch_size, 1], [20, batch_size, 29]
-            loss = weighted_log_loss(label_tensor, output_y)
+            loss = loss_func(output_y, label_tensor)
             print("epoch {}/{}, iter {}/{}, loss = {}".format(epoch + 1, MAX_EPOCH, iter + 1, train_mini_batch_number, loss))
             writer.add_scalar(tag="train/loss", scalar_value=loss, global_step=iter_total - 1)
 
@@ -197,7 +210,6 @@ def train_and_validate(dataset_path, training_device='cpu'):
             if iter_total % VAL_EACH_ITER == 0:
                 print("its time to val")
                 correct_count = 0
-                camera_correct_count = 0
                 with torch.no_grad():
                     model.eval()
                     for val_iter, (val_audio_tensor, val_label_tensor) in enumerate(val_loader):
@@ -206,7 +218,7 @@ def train_and_validate(dataset_path, training_device='cpu'):
                         h = model.init_hidden(audio_tensor_val.shape[0])
                         val_y, val_h = model(audio_tensor_val, h)
 
-                        val_loss = weighted_log_loss(label_tensor_val, val_y)
+                        val_loss = loss_func(val_y, label_tensor_val)
                         val_result = (val_y > 0.5).float()
                         correct_count += torch.sum(label_tensor_val == val_result)
 
